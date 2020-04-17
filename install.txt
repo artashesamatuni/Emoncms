@@ -1,0 +1,109 @@
+3) Update repositories
+It may be worth making sure that all packages are up to date at this point:
+
+$ sudo apt-get update
+
+
+//
+sudo apt install -y apache2 mysql-server mysql-client php7.2 libapache2-mod-php7.2 php7.2-mysql php7.2-gd php7.2-opcache php7.2-curl php-pear php7.2-dev php7.2-common redis-server php-redis git build-essential php7.2-mbstring php-swiftmailer
+
+
+//
+Step 2: Install Required PHP Dependencies to Install Mcrypt
+Now that PHP-7.2 is installed, run the commands below to install required dependencies that will allow the mcrypt module to be installed on Ubuntu with PHP-7.2 support… To install the required packages, run the commands below
+
+sudo apt install php-dev libmcrypt-dev php-pear
+
+After that, continue below to install mcrypt…
+
+Now that PHP-7.2 and all its required dependencies to install mcrypt are installed, run the commands below to install PHP mcrypt module on Ubuntu using pecl channel…
+
+sudo pecl channel-update pecl.php.net
+sudo pecl install mcrypt-1.0.1
+After running the commands above, you should see a message that reads php mcrypt module was successfully installed…. and that you should include the mcrypt.so extension in the php.ini file…
+
+Build process completed successfully
+Installing '/usr/lib/php/20170718/mcrypt.so'
+install ok: channel://pecl.php.net/mcrypt-1.0.1
+configuration option "php_ini" is not set to php.ini location
+You should add "extension=mcrypt.so" to php.ini
+Finally, run the commands below to open PHP configuration file…
+
+sudo nano /etc/php/7.2/cli/php.ini
+
+Then add the line below into the file, just below [PHP] and save…
+
+extension=mcrypt.so
+
+Save the file and you’re done….
+
+If you’re going to be using Apache2 HTTP server with PHP support, you may also want to add the mcrypt.so exetension to the php.ini file below:
+
+sudo nano /etc/php/7.2/apache2/php.ini
+
+For Nginx, use this:
+
+sudo nano /etc/php/7.2/fpm/php.ini
+
+//
+
+When the blue dialog appears enter a password for root user, note the password down as you will need it later.
+
+5) Install apache2
+
+$ sudo apt-get install apache2
+
+If apache fails to start (as it did for me) run the following:
+
+$ sudo groupadd www-data
+$ sudo usermod -a -G www-data www-data
+
+6) Install php
+
+$ sudo apt-get install php7.2 libapache2-mod-php7.2
+
+$ sudo apt-get install php7.2-mysql
+
+7) Enable mod rewrite
+
+$ sudo a2enmod rewrite
+
+$ sudo nano /etc/apache2/sites-enabled/000-default
+
+Change (line 7 and line 11), "AllowOverride None" to "AllowOverride All".
+Save and exit.
+
+
+Installing emoncms:
+
+7) Install git (optional)
+
+$ sudo apt-get install git-core
+
+Follow this tutorial on creating keys etc:
+http://help.github.com/linux-set-up-git/
+
+Finally to download, in the /var/www folder type:
+
+$ git clone git@github.com:artashesamatuni/Emoncms.git
+
+Alternatively download emoncms and unzip to your server:
+https://github.com/openenergymonitor/emoncms3
+
+8) Create a MYSQL database
+
+$ mysql -u root - p
+
+Enter the mysql password that you set above.
+Then enter the sql to create a database:
+
+mysql> CREATE DATABASE emoncms;
+
+9) Set emoncms database settings.
+In the folder emoncms3/Includes rename default.settings.php to settings.php. In settings.php enter your mysql username (root) and password, host (localhost) and database name (if as above - emoncms).
+
+
+10) In an internet browser, load emoncms:
+
+http://YOURIP/emoncms3
+
